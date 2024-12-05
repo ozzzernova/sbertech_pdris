@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<style>
+    body {
+        background: palegoldenrod;
+        font-family: Courier, monospace;
+        font-size: 25px;
+        text-align: center;
+    }
+    #your_word {
+        margin-top: 100px;
+    }
+    #tmp {
+        color: palegoldenrod;
+    }
+    #sign {
+        color: palegoldenrod;
+    }
+    #change {
+        color: palegoldenrod;
+    }
+    #back_button {
+        width: 200px;
+        height: 100px;
+        font-family: Courier, monospace;
+        background-color: #bb64b7;
+        margin-top: 100px;
+        line-height: 20px;
+        font-size: 30px;
+        user-select: none;
+    }
+</style>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="your_word">Your word is {{word}}</div>
+<div id="your_change">Your change is {{action}}</div>
+<div id="tmp">{{tmp}}</div>
+<div id="sign">{{sign}}</div>
+<div id="change">{{change}}</div>
+<button id="back_button" onclick="document.location='/game'">BACK</button>
+</body>
+<script>
+    let click = Number(sessionStorage.getItem('myClick'));
+    let increment = Number(sessionStorage.getItem('myInc'));
+    let change = Number(document.getElementById('change').innerText) * Number(document.getElementById('sign').innerText);
+    if (Number(document.getElementById('tmp').innerText) === 1) {
+        sessionStorage.removeItem('myClick');
+        sessionStorage.setItem('myClick', (Math.max(click + change, 1)).toString())
+    } else {
+        sessionStorage.removeItem('myInc');
+        sessionStorage.setItem('myInc', (Math.max(increment + change, 0)).toString())
+    }
+</script>
+</html>

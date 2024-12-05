@@ -1,0 +1,21 @@
+---
+- name: Start App
+  hosts: all
+  tasks:
+  
+  - name: Create App directory
+    file:
+      path: /app
+      state: directory
+
+  - name: Copy App
+    copy:
+      src: ../app/
+      dest: /app
+
+  - name: Install requirements
+    pip:
+      requirements: /app/requirements.txt
+
+  - name: Run App
+    command: python3 /app/app.py

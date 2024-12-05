@@ -1,0 +1,134 @@
+<style>
+  body {
+    background-color: #c5cbb7;
+    font-size: 50px;
+    text-align: center;
+  }
+  #upgrade_button {
+    width: 200px;
+    height: 200px;
+    font-family: Courier, monospace;
+    background-color: #64bba7;
+    border-radius: 100px;
+    margin: 0 auto;
+    line-height: 20px;
+    user-select: none;
+  }
+  #button {
+    width: 300px;
+    height: 300px;
+    font-size: xx-large;
+    font-family: Courier, monospace;
+    background-color: #bb64b5;
+    border-radius: 150px;
+    margin: 0 auto;
+    line-height: 200px;
+    user-select: none;
+    margin-top: 120px;
+    margin-left: 100px;
+    margin-right: 100px;
+  }
+  #autoclick_button {
+    width: 200px;
+    height: 200px;
+    font-family: Courier, monospace;
+    background-color: #6764bb;
+    border-radius: 100px;
+    margin: 0 auto;
+    line-height: 20px;
+    user-select: none;
+  }
+  #score {
+    margin-top: 50px;
+    font-size: 60px;
+    font-weight: bold;
+    color: #374428;
+  }
+  #random_button {
+    width: 200px;
+    height: 100px;
+    font-family: Courier, monospace;
+    background-color: #e0d280;
+    margin-top: 100px;
+    line-height: 20px;
+    font-size: 20px;
+    user-select: none;
+  }
+</style>
+<div id="score"></div>
+<button id="upgrade_button" ></button>
+<button id="button" >CLICK ME</button>
+<button id="autoclick_button" class="start"></button>
+<BR>
+<button id="random_button"></button>
+
+<script>
+  let counter = 0, cost_up = 20, cost_auto = 20, click = 1, increment = 0, speed = 500, cost_random = 100;
+  let tId;
+  inc();
+  counter = Number(sessionStorage.getItem('myScore'));
+  cost_up = Math.max(Number(sessionStorage.getItem('myCostUp')), 20);
+  cost_auto = Math.max(Number(sessionStorage.getItem('myCostAuto')), 20);
+  click = Math.max(Number(sessionStorage.getItem('myClick')), 1);
+  increment = Math.max(Number(sessionStorage.getItem('myInc')), 0);
+  cost_random = Math.max(Number(sessionStorage.getItem('myCostRandom')), 100);
+  document.getElementById('score').innerText = counter;
+  document.getElementById('upgrade_button').innerText = "UPGRADE CLICK\n BY 1 FOR " + cost_up.toString();
+  document.getElementById('autoclick_button').innerText = "UPGRADE AUTOCLICK\n BY 1 FOR " + cost_auto.toString();
+  document.getElementById('random_button').innerText = "RANDOM ACTION\n FOR " + cost_random.toString();
+  document.getElementById('button').onclick = () => {
+    counter = counter + click;
+    document.getElementById('score').innerText = counter;
+    sessionStorage.setItem('myScore', counter);
+  };
+  document.getElementById('random_button').onclick = () => {
+    if (counter >= cost_random) {
+        counter -= cost_random;
+        cost_random += 50;
+        sessionStorage.clear();
+        sessionStorage.setItem('myScore', counter);
+        sessionStorage.setItem('myCostUp', cost_up);
+        sessionStorage.setItem('myCostAuto', cost_auto);
+        sessionStorage.setItem('myClick', click);
+        sessionStorage.setItem('myInc', increment);
+        sessionStorage.setItem('myCostRandom', cost_random);
+        document.location='/game/random';
+    }
+  };
+  document.getElementById('upgrade_button').onclick = () => {
+    if (counter >= cost_up) {
+        counter = counter - cost_up;
+        click = click + 1;
+        cost_up = cost_up * 2;
+        document.getElementById('upgrade_button').innerText = "UPGRADE CLICK\n BY 1 FOR " + cost_up.toString();
+        sessionStorage.setItem('myScore', counter);
+        sessionStorage.setItem('myCostUp', cost_up);
+        sessionStorage.setItem('myClick', click);
+    }
+    document.getElementById('score').innerText = counter;
+  };
+  function inc() {
+    clearInterval(tId);
+    tId = setInterval(function() {
+      document.getElementById("score").innerText = counter += increment;
+      sessionStorage.setItem('myScore', counter);
+    }, speed);
+  }
+  window.addEventListener("load", function() {
+    document.querySelectorAll(".start").forEach(function(but) {
+      but.addEventListener("click", function() {
+         if (counter >= cost_auto) {
+           counter = counter - cost_auto;
+           increment = increment + 1;
+           inc();
+           cost_auto = cost_auto * 2;
+           sessionStorage.setItem('myScore', counter);
+           sessionStorage.setItem('myInc', increment);
+           sessionStorage.setItem('myCostAuto', cost_auto);
+           document.getElementById('autoclick_button').innerText = "UPGRADE AUTOCLICK\n BY 1 FOR " + cost_auto.toString();
+         }
+      });
+    });
+  });
+
+</script>
