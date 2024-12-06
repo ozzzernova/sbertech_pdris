@@ -1,0 +1,4 @@
+[hosts]
+    host_1 ansible_ssh_user=root
+    host_2 ansible_ssh_user=root
+

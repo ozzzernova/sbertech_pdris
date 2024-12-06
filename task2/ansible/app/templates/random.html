@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<style>
+    h1 {
+        color: rgba(35, 18, 56, 0.87);
+        font-family: monospace;
+        font-weight: bold;
+        text-decoration-line: underline;
+        font-size: 35px;
+        text-align: center;
+        margin-top: 100px;
+    }
+    h4 {
+        color: rgba(40, 4, 85, 0.87);
+        font-family: monospace;
+        font-weight: lighter;
+        text-shadow: 2px 2px 4px #6764bb;
+        font-size: 25px;
+        text-align: center;
+    }
+    #back_button {
+        width: 200px;
+        height: 100px;
+        font-family: Courier, monospace;
+        background-color: #bb64b7;
+        margin-top: 100px;
+        line-height: 20px;
+        font-size: 30px;
+        user-select: none;
+    }
+    body {
+    background: #9fcfd3;
+    font-family: monospace;
+    text-align: center;
+    }
+</style>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clicker game</title>
+</head>
+<body>
+<h1>RANDOM ACTION</h1>
+<h4>Enter word to get change</h4>
+<BR>
+<form method="post" action="/game/result">
+    <input type="text" name="text">
+    <button type="submit">Get change</button>
+</form>
+<BR>
+<BR>
+<BR>
+<button id="back_button" onclick="document.location='/game'">BACK</button>
+</body>
+</html>
+
+<script>
+
+</script>

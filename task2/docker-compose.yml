@@ -1,0 +1,26 @@
+services:
+  host_1:
+    build: ./hosts
+    tty: true
+    networks:
+      - host-net
+    ports: 
+      - 5001:80
+
+  host_2:
+    build: ./hosts
+    tty: true
+    networks:
+      - host-net
+    ports:
+      - 5002:80
+
+  master:
+    build: .
+    tty: true
+    networks:
+      - host-net
+
+networks:
+  host-net:
+    driver: bridge
