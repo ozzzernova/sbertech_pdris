@@ -1,0 +1,21 @@
+---
+- name: Start App
+  hosts: all
+  tasks:
+  
+  - name: Create App directory
+    file:
+      path: /app
+      state: directory
+
+  - name: Copy App
+    copy:
+      src: "{{ app_dir }}/src/"
+      dest: /src/
+
+  - name: Install requirements
+    pip:
+      requirements: /src/requirements.txt
+
+  - name: Run App
+    command: nohup python3 /src/main.py </dev/null >/dev/null 2>&1 &

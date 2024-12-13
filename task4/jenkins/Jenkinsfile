@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Clone repository') {
+            steps {
+                git branch: 'task4', url: 'https://github.com/ozzzernova/sbertech_pdris.git'
+            }
+        }
+
+        stage('Requirements') {
+            steps {
+                sh "pip install --no-cache-dir --break-system-packages -r task4/app/src/requirements.txt"
+            }
+        }
+
+        stage('Run pytest') {
+            steps {
+                sh "pytest task4/app/tests/test.py --cov=app.src.main --cov-report xml:coverage.xml --alluredir=allure-results || true"
+            }
+        }
+
+        stage('Sonar') {
+            steps {
+                withSonarQubeEnv('PDRIS') {
+                    tool name: 'Maven', type: 'maven'
+                    sh 'mvn clean -f task4/pom.xml sonar:sonar -X'
+                }
+            }
+        }
+
+        stage('Allure') {
+            steps {
+                allure([
+                    reportBuildPolicy: 'ALWAYS',
+                    results: [[path: 'report']]
+                ])
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh "cd /ansible && ansible-playbook playbooks/main.yml --extra-vars app_dir=${env.WORKSPACE}/task4/app"
+            }
+        }
+
+    }
+
+    post {
+        always {
+            echo 'Finish'
+        }
+    }
+}
